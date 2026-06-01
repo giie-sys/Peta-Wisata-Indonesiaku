@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Peta Wisata Indonesiaku</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Peta dengan border hitam 5px dan sudut membulat 15px */
+        #map {
+            height: 100vh;
+            width: 100%;
+            border: 5px solid #00060c;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        .custom-control {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="info-panel">
+        <strong>🏖️ Selamat Datang di Peta Wisata Nusantara</strong><br>
+        Geser dan zoom untuk menjelajahi peta
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. INISIALISASI PETA (KOORDINAT & ZOOM)
+        // ==========================================
+        var map = L.map('map').setView([-6.9146, 107.6098], 13);
+        // KOORDINAT: Gedung Sate, Bandung
+        // ZOOM: 13
+
+        // ==========================================
+        // 2. TAMBAHKAN BASEMAP (GOOGLE MAPS & OSM)
+        // ==========================================
+        // OpenStreetMap layer (opsional)
+        var streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        });
+
+        // Google Maps style (menggunakan tile server contoh)
+        // Catatan: ini contoh penggunaan tile Google. Untuk penggunaan resmi, ikuti ketentuan Google Maps Platform.
+        var googleLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0','mt1','mt2','mt3'],
+            attribution: '&copy; Google',
+            maxZoom: 20
+        });
+
+        // Set Google Maps sebagai basemap default
+        googleLayer.addTo(map);
+
+        // ==========================================
+        // 3. TAMBAHKAN SCALE BAR (SKALA PETA)
+        // ==========================================
+        L.control.scale({
+            metric: true,
+            imperial: false,
+            position: 'bottomright'
+        }).addTo(map);
+
+        // ==========================================
+        // 4. MARKER AWAL (GEDUNG SATE)
+        // ==========================================
+        var marker = L.marker([-6.9146, 107.6098]).addTo(map);
+        marker.bindPopup('<b>Gedung Sate</b><br>Bandung, Jawa Barat');
+
+        // ==========================================
+        // 5. TAMBAHKAN 3 MARKER WISATA (TUGAS)
+        //    - Setiap marker memiliki popup: nama + 1 kalimat deskripsi
+        // ==========================================
+        // Marker 1: Jalan Braga (sekitar pusat Bandung)
+        var markerBraga = L.marker([-6.9175, 107.6100]).addTo(map);
+        markerBraga.bindPopup('<b>Jalan Braga</b><br>Jalan bersejarah dengan kafe, toko antik, dan suasana kolonial.');
+
+        // Marker 2: Tangkuban Perahu (gunung berapi dekat Bandung)
+        var markerTangkuban = L.marker([-6.7660, 107.6055]).addTo(map);
+        markerTangkuban.bindPopup('<b>Tangkuban Perahu</b><br>Gunung berapi dengan kawah yang mudah diakses dan pemandangan spektakuler.');
+
+        // Marker 3: Kawah Putih Ciwidey (danau kawah)
+        var markerKawahPutih = L.marker([-7.1667, 107.3333]).addTo(map);
+        markerKawahPutih.bindPopup('<b>Kawah Putih Ciwidey</b><br>Danau kawah berwarna kehijauan yang terkenal dengan pemandangan unik.');
+
+        // ==========================================
+        // 6. LAYER CONTROL (BASEMAPS & OVERLAYS)
+        // ==========================================
+        var baseMaps = {
+            "Google Maps (Default)": googleLayer,
+            "OpenStreetMap": streetLayer
+        };
+
+        var overlayMaps = {
+            "Gedung Sate": marker,
+            "Jalan Braga": markerBraga,
+            "Tangkuban Perahu": markerTangkuban,
+            "Kawah Putih": markerKawahPutih
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+        console.log('Modul5-Modif: Peta berhasil dimuat dengan Google Maps sebagai basemap.');
+    </script>
+</body>
+</html>
